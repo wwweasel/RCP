@@ -37,4 +37,12 @@ public class EmployeeFactory {
 		
 	}
 	
+	public static Employee getEmployeeE(String name ,String surname, Profession profession) {
+		Employee employee;
+		
+		employee =  new Employee(name,surname,profession,profession.getSalary()); 
+		
+		return employee;
+	}
+	
 }

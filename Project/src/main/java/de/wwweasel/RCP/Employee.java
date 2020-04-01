@@ -8,6 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Employee{
 	
+	// fields
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -17,6 +18,7 @@ public class Employee{
 	protected float salary;
 	protected Profession profession;
 	
+	// Constructors
 	public Employee() {}
 	
 	public Employee( String name ,String surname, Profession profession, float salary) {
@@ -26,7 +28,8 @@ public class Employee{
 		this.profession = profession;
 		this.salary = salary;
 	}
-
+	
+	// methods
 	public String getName() {return name;}
 
 	public void setName(String name) {this.name = name;}
@@ -48,8 +51,26 @@ public class Employee{
 		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", profession=" + profession + ", salary=" + salary + "]";
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Employee other = (Employee) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 	
-	
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}	
 	
 }

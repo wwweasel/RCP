@@ -30,7 +30,11 @@ public class EmployeeController {
 	@RequestMapping(method=RequestMethod.POST,value="/add")
 	@ResponseBody
 	public Iterable<Employee> addEmployee(@ModelAttribute Employee employee) {
-		repo.save(employee);
+		
+		Employee em = EmployeeFactory.getEmployeeE( employee.getName(), employee.getSurname(), employee.getProfession() );
+		
+		Employee result = repo.save(em);
+		System.out.println("Saved: " + result + " to DataBase.");
 		return repo.findAll();
 	}
 	
