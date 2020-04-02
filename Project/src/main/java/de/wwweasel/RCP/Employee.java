@@ -10,7 +10,7 @@ public class Employee{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	protected int id;
 	
 	protected String name;
 	protected String surname;
@@ -43,6 +43,8 @@ public class Employee{
 	
 	public void setProfession(Profession profession) { this.profession = profession; }
 	
+	public int getId() {return id;}
+
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", profession=" + profession + ", salary=" + salary + "]";

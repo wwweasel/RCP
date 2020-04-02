@@ -1,7 +1,6 @@
 package de.wwweasel.RCP;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,16 +21,21 @@ public class EmployeeController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="/")
 	public String start( Model model) {
-		model.addAttribute("employee", new Employee());
-		model.addAttribute("professions", Profession.values() );//Add all the values of Profession for a DropDown 
+		model.addAttribute("employees", repo.findAll());
 		return "index";
 	}
 	
+	@RequestMapping(method=RequestMethod.GET,value="/add")
+	public String addEmployee(Model model) {
+		model.addAttribute("employee", new Employee());
+		model.addAttribute("professions", Profession.values() );//Add all the values of Profession for a DropDown 
+		return "add";
+	}
+	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
-	@ResponseBody
-	public Iterable<Employee> addEmployee(@ModelAttribute Employee employee) {
+	public String addEmployee(@ModelAttribute Employee employee) {
 		repo.save(employee);
-		return repo.findAll();
+		return "redirect:/";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}/{name}/{surname}")
@@ -44,13 +48,12 @@ public class EmployeeController {
 		return repo.findAll();
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="/delete/{ids}")
-	@ResponseBody
-	public Iterable<Employee> deleteEmployee(@PathVariable int[] ids) {
-		for (int id : ids) {
-			repo.deleteById(id);
-		}
-		return repo.findAll();
+	@RequestMapping(method=RequestMethod.POST,value="/delete")//{ids}
+	public String deleteEmployee(@ModelAttribute Employee employee) {
+		System.out.println("id: " + employee);
+		repo.deleteById(employee.getId());
+
+		return "redirect:/";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/find/all")

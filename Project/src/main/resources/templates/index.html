@@ -1,55 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head >
-	<meta charset="UTF-8">
-	
-	<script type="text/javascript" src="webjars/jquery/3.4.0/jquery.min.js"></script>
-	<script th:src="@{/main.js}"></script>
-	
-	<script type="text/javascript" src="webjars/popper.js/1.14.3/umd/popper.min.js"></script>
-	
-	<link rel="stylesheet" href="webjars/bootstrap/4.4.1-1/css/bootstrap.min.css"/>
-	<script type="text/javascript" src="webjars/bootstrap/4.4.1-1/js/bootstrap.min.js"></script>
-	
-	<link rel="stylesheet" th:href="@{/styles.css}"></link>
-	
-</head>
+<head th:replace="fragments :: head"></head>
 
 <body>
 
-	<div class="container">
-	  <div class="card">
-	    <div class="card-body">Add Employee</div>
-	    	<!-- This will send the transport via POST loads the result into the same View in the div with the id 'responseReceiver' -->
-			<form class="form-inline" action="#" th:object="${employee}">
-				<div class="form-group mb-2 mr-sm-2" >
-					<label for="name">Name:</label>
-					<input th:field="*{name}" placeholder="name"></input><br>
-				</div>
-				<div class="form-group mb-2 mr-sm-2">
-					<label for="surname">Surname:</label>
-					<input th:field="*{surname}" placeholder="surname"></input><br>
-				</div>
-				
-				<!-- DropDown Profession -->
-				<div class="form-group mb-2 mr-sm-2">	
-					<select class="form-control selectpicker" th:field="*{profession}">
-                        <option value="">profession</option>
-                        <option th:each="prof : ${professions}"
-                                th:value="${prof}"
-                                th:text="${prof}">
-                        </option>
-					</select>
-				</div>
-				
-				<!-- Button -->
-				<div class="form-group mb-2 mr-sm-2">	
-					<button type="submit" formaction="/add" formmethod="post" class="btn btn-primary mb-2 mr-sm-2">add Employee</button>
-				</div>
-				
+<div class="container-fluid">
+	<div class="card" style="margin-top: 1.5em;">
+	
+		<div class="card-header">
+			<h6>VFX Employees</h6>
+		</div>
+	
+		<div class="card-body">
+			<form action="#" th:object="${employee}">
+				<table class="table table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Firstname</th>
+							<th>Lastname</th>
+							<th>Profession</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="employee: ${employees}">
+							<td th:text="${employee.id">id</td>
+							<td th:text="${employee.name}">name</td>
+							<td th:text="${employee.surname}">surname</td>
+							<td th:text="${employee.profession}">profession</td>
+							<td><button type="submit" formaction="/delete" formmethod="post" class="btn btn-danger" th:value="${employee.id}">D</button>
+								<button type="submit" formaction="/add" formmethod="get" class="btn btn-primary">E</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<button type="submit" formaction="/add" formmethod="get" class="btn btn-primary">Add Employee</button>
 			</form>
-	  	</div>
+		</div>
+		
 	</div>
+</div>
 	
 </body>
 </html>
