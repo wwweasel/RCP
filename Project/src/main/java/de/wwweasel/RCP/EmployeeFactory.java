@@ -1,5 +1,6 @@
 package de.wwweasel.RCP;
 
+
 public class EmployeeFactory {
 		
 	public EmployeeFactory() {}

@@ -12,28 +12,45 @@
 		</div>
 	
 		<div class="card-body">
-			<form action="#" th:object="${employee}">
-				<table class="table table table-hover">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Firstname</th>
-							<th>Lastname</th>
-							<th>Profession</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="employee: ${employees}">
-							<td th:text="${employee.id">id</td>
-							<td th:text="${employee.name}">name</td>
-							<td th:text="${employee.surname}">surname</td>
-							<td th:text="${employee.profession}">profession</td>
-							<td><button type="submit" formaction="/delete" formmethod="post" class="btn btn-danger" th:value="${employee.id}">D</button>
-								<button type="submit" formaction="/add" formmethod="get" class="btn btn-primary">E</button></td>
-						</tr>
-					</tbody>
-				</table>
+			<form action="#" th:object="${employees}">			
+				
+				<div th:if="${employees.size() == 0}">
+				  <p>There are no Employees yet.</p>
+				</div>
+				<div th:unless="${employees.size() == 0}">
+					<table class="table table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Firstname</th>
+								<th>Lastname</th>
+								<th>Profession</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>					
+							<tr th:each="employee: ${employees}">
+								<td th:text="${employee.id}">id</td>
+								<td th:text="${employee.name}">name</td>
+								<td th:text="${employee.surname}">surname</td>
+								<td th:text="${employee.profession}">profession</td>
+								<td>
+								<!--<form method="GET" th:action="@{/delete}">
+									<button type="submit" th:name="id" th:value="${employee.id}" class="btn btn-danger">D</button>
+								</form>-->
+									<button type="submit" th:name="id" th:value="${employee.id}" formaction="/delete" formmethod="get" class="btn btn-danger float-right">D</button>
+								</td>
+								<td>	
+									<!--<form method="GET" th:action="@{'/edit/' + ${employee.id}}">
+										<button type="submit" class="btn btn-secondary">D</button>
+									</form>-->
+									<button type="submit" th:name="id" th:value="${employee.id}" th:formaction="@{'/edit/' + ${employee.id}}" th:formmethod="GET" class="btn btn-primary">E</button> 
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				<button type="submit" formaction="/add" formmethod="get" class="btn btn-primary">Add Employee</button>
 			</form>
 		</div>

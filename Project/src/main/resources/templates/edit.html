@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+	<div class="container-fluid">
+		
+		<div class="col-6">			
+			<div class="card" style="margin-top: 1.5em;">
+				
+				<div class="card-header">
+					<h6>Edit Employee</h6>
+				</div>
+					
+				<div class="card-body">
+					<form action="#" th:object="${employee}">
+					
+						<input name="id" type="hidden" th:value="${employee.id}" />
+						
+						<div class="form-grp row">
+							<label for="name" class="col-md-12 col-lg-3 col-form-label">Name:</label>
+							<div class="col-md-12 col-lg-9">
+								<input class="form-control" th:field="*{name}" placeholder="name">
+							</div>
+						</div>
+						<div class="form-grp row">
+							<label for="surname" class="col-md-12 col-lg-3 col-form-label">Surname:</label>
+							<div class="col-md-12 col-lg-9">
+								<input class="form-control" th:field="*{surname}" placeholder="Surname">
+							</div>
+						</div>
+							  
+						<div class="form-grp row">
+							<label for="profession" class="col-md-12 col-lg-3 col-form-label">Profession:</label>
+							<select class="form-control selectpicker col-md-12 col-lg-9" th:field="*{profession}">
+								<option th:each="prof : ${employee.profession.values()}"
+									th:value="${prof}"
+									th:text="${prof}">
+								</option>
+							</select>
+						</div>
+						
+						<div class="form-grp">
+							<label class="col-md-2 col-form-label"></label>
+						</div>
+						
+						<button type="submit" formaction="/" formmethod="get" class="btn btn-secondary">Cancel</button>
+						<button type="submit" formaction="/saveEmployeeEdits" formmethod="post" class="btn btn-primary float-right">Save</button>
+						
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

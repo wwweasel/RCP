@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class EmployeeController {
 	
 	@Autowired
-	EmployeeRepo repo;
+	private EmployeeRepo repo;
 	
 	@RequestMapping(method=RequestMethod.GET,value="/")
 	public String start( Model model) {
@@ -34,25 +34,38 @@ public class EmployeeController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
 	public String addEmployee(@ModelAttribute Employee employee) {
-		repo.save(employee);
+		repo.save( new Employee(employee.getName(),employee.getSurname(),employee.getProfession(),employee.getProfession().getSalary()) );
 		return "redirect:/";
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}/{name}/{surname}")
-	@ResponseBody
-	public Iterable<Employee> addEmployee(@PathVariable int id, @PathVariable String name, @PathVariable String surname) {
+	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}")
+	public String editEmployee(@PathVariable Integer id, Model model) {
 		Employee e = repo.findById(id).get();
-		e.setName(name);
-		e.setSurname(surname);
-		repo.save(e);
-		return repo.findAll();
+		model.addAttribute("employee", e);
+		System.out.println("Check: " + e);
+		return "edit";
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/delete")//{ids}
-	public String deleteEmployee(@ModelAttribute Employee employee) {
-		System.out.println("id: " + employee);
-		repo.deleteById(employee.getId());
-
+	@RequestMapping(method=RequestMethod.POST,value="/saveEmployeeEdits")
+	public String saveEmployeeEdits(@ModelAttribute Employee employee) {
+		repo.save( employee );
+		return "redirect:/";
+	}
+	
+	
+//	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}/{name}/{surname}")
+//	@ResponseBody
+//	public Iterable<Employee> addEmployee(@PathVariable int id, @PathVariable String name, @PathVariable String surname) {
+//		Employee e = repo.findById(id).get();
+//		e.setName(name);
+//		e.setSurname(surname);
+//		repo.save(e);
+//		return repo.findAll();
+//	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="/delete")
+	public String deleteEmployee(@RequestParam Integer id) {
+		repo.deleteById(id);
 		return "redirect:/";
 	}
 	
@@ -70,6 +83,12 @@ public class EmployeeController {
 			list.add( repo.findById(id).get() );
 		}
 		return list;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET,value="/findByProfession")
+	@ResponseBody
+	public Iterable<Employee> findByProfession(@RequestParam String profession) {
+		return repo.findByProfession(Profession.valueOf(profession));
 	}
 
 }
