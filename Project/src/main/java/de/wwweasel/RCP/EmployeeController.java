@@ -1,6 +1,8 @@
 package de.wwweasel.RCP;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class EmployeeController {
 	
-	@Autowired
-	private EmployeeRepo repo;
 	
+	@Autowired
+	private EmployeeRepo employeeService;
+
 	@RequestMapping(method=RequestMethod.GET,value="/")
 	public String start( Model model) {
-		model.addAttribute("employees", repo.findAll());
+		model.addAttribute("employees", employeeService.findAll());
 		return "index";
 	}
 	
@@ -34,21 +37,24 @@ public class EmployeeController {
 	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
 	public String addEmployee(@ModelAttribute Employee employee) {
-		repo.save( new Employee(employee.getName(),employee.getSurname(),employee.getProfession(),employee.getProfession().getSalary()) );
+		employeeService.save( employee );
 		return "redirect:/";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}")
 	public String editEmployee(@PathVariable Integer id, Model model) {
-		Employee e = repo.findById(id).get();
-		model.addAttribute("employee", e);
-		System.out.println("Check: " + e);
+		Optional<Employee> oEmployee = employeeService.findById(id);
+		if(oEmployee.isPresent()) {
+			Employee employee = oEmployee.get();
+			model.addAttribute("employee", employee);
+		}// ToDo: Exception!
+		
 		return "edit";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/saveEmployeeEdits")
 	public String saveEmployeeEdits(@ModelAttribute Employee employee) {
-		repo.save( employee );
+		employeeService.save( employee );
 		return "redirect:/";
 	}
 	
@@ -65,14 +71,8 @@ public class EmployeeController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="/delete")
 	public String deleteEmployee(@RequestParam Integer id) {
-		repo.deleteById(id);
+		employeeService.deleteById(id);
 		return "redirect:/";
-	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="/find/all")
-	@ResponseBody
-	public Iterable<Employee> getEmployee() {
-		return repo.findAll();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/find/{ids}")
@@ -80,15 +80,15 @@ public class EmployeeController {
 	public ArrayList<Employee> getAllEmployees(@PathVariable int[] ids ) {
 		ArrayList<Employee> list = new ArrayList<Employee>();
 		for (int id : ids) {
-			list.add( repo.findById(id).get() );
+			list.add( employeeService.findById(id).get() );
 		}
 		return list;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/findByProfession")
 	@ResponseBody
-	public Iterable<Employee> findByProfession(@RequestParam String profession) {
-		return repo.findByProfession(Profession.valueOf(profession));
+	public List<Employee> findByProfession(@RequestParam String profession) {
+		return employeeService.findByProfession(Profession.valueOf(profession));
 	}
 
 }
