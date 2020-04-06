@@ -1,6 +1,5 @@
 package de.wwweasel.RCP;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class EmployeeController {
 	
-	
 	@Autowired
-	private EmployeeRepo employeeService;
+	private EmployeeService employeeService;
 
 	@RequestMapping(method=RequestMethod.GET,value="/")
-	public String start( Model model) {
+	public String start( Model model, @ModelAttribute("editError") String editError) {
 		model.addAttribute("employees", employeeService.findAll());
+		model.addAttribute("editError", editError);
 		return "index";
 	}
 	
@@ -42,48 +41,44 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}")
-	public String editEmployee(@PathVariable Integer id, Model model) {
+	public ModelAndView editEmployee(@PathVariable Integer id) {
+		ModelAndView mv = new ModelAndView();
 		Optional<Employee> oEmployee = employeeService.findById(id);
 		if(oEmployee.isPresent()) {
 			Employee employee = oEmployee.get();
-			model.addAttribute("employee", employee);
-		}// ToDo: Exception!
-		
-		return "edit";
+			mv.addObject("employee", employee);
+			mv.setViewName("edit");
+			
+		}else {
+			String editError = "Could not find Employee with ID: " + id; 
+			mv.addObject("editError",editError);
+			mv.setViewName("redirect:/");
+		}
+		return mv;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/saveEmployeeEdits")
-	public String saveEmployeeEdits(@ModelAttribute Employee employee) {
-		employeeService.save( employee );
+	@RequestMapping(method=RequestMethod.POST,value="/edit")
+	public String editEmployee(@ModelAttribute Employee employee) {
+		employeeService.save(employee);
 		return "redirect:/";
 	}
 	
 	
-//	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}/{name}/{surname}")
-//	@ResponseBody
-//	public Iterable<Employee> addEmployee(@PathVariable int id, @PathVariable String name, @PathVariable String surname) {
-//		Employee e = repo.findById(id).get();
-//		e.setName(name);
-//		e.setSurname(surname);
-//		repo.save(e);
-//		return repo.findAll();
-//	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="/delete")
+	@RequestMapping(method=RequestMethod.POST,value="/delete")
 	public String deleteEmployee(@RequestParam Integer id) {
 		employeeService.deleteById(id);
 		return "redirect:/";
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="/find/{ids}")
-	@ResponseBody
-	public ArrayList<Employee> getAllEmployees(@PathVariable int[] ids ) {
-		ArrayList<Employee> list = new ArrayList<Employee>();
-		for (int id : ids) {
-			list.add( employeeService.findById(id).get() );
-		}
-		return list;
-	}
+//	@RequestMapping(method=RequestMethod.GET,value="/find/{ids}")
+//	@ResponseBody
+//	public ArrayList<Employee> getAllEmployees(@PathVariable int[] ids ) {
+//		ArrayList<Employee> list = new ArrayList<Employee>();
+//		for (int id : ids) {
+//			list.add( employeeService.findById(id).get() );
+//		}
+//		return list;
+//	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/findByProfession")
 	@ResponseBody

@@ -12,7 +12,7 @@
 		</div>
 	
 		<div class="card-body">
-			<form action="#" th:object="${employees}">			
+			<form action="#" th:action="@{/add}" th:method="GET" th:object="${employees}">			
 				
 				<div th:if="${employees.size() == 0}">
 				  <p>There are no Employees yet.</p>
@@ -33,26 +33,29 @@
 							<tr th:each="employee: ${employees}">
 								<td th:text="${employee.id}">id</td>
 								<td th:text="${employee.name}">name</td>
-								<td th:text="${employee.surname}">surname</td>
+								<td th:text="${employee.surname}"></td>
 								<td th:text="${employee.profession}">profession</td>
+								
 								<td>
-								<!--<form method="GET" th:action="@{/delete}">
-									<button type="submit" th:name="id" th:value="${employee.id}" class="btn btn-danger">D</button>
-								</form>-->
-									<button type="submit" th:name="id" th:value="${employee.id}" formaction="/delete" formmethod="get" class="btn btn-danger float-right">D</button>
+									<!--<form method="GET" th:action="@{/delete}">
+										<button type="submit" th:name="id" th:value="${employee.id}" class="btn btn-danger">D</button>
+									</form>-->
+									<button type="submit" th:name="id" th:value="${employee.id}" th:formaction="@{/delete}" th:formmethod="POST" class="btn btn-danger float-right">D</button>
 								</td>
 								<td>	
-									<!--<form method="GET" th:action="@{'/edit/' + ${employee.id}}">
-										<button type="submit" class="btn btn-secondary">D</button>
+									<!--<form method="GET" th:action="@{/edit/{id}(id=${employee.id})}">
+										<button type="submit" class="btn btn-secondary">E</button>
 									</form>-->
-									<button type="submit" th:name="id" th:value="${employee.id}" th:formaction="@{'/edit/' + ${employee.id}}" th:formmethod="GET" class="btn btn-primary">E</button> 
+									<button type="submit" th:formaction="@{/edit/{id}(id=${employee.id})}" th:formmethod="GET" class="btn btn-primary">E</button><!-- th:formaction="@{'/edit/' + ${employee.id}}" -->
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<button type="submit" formaction="/add" formmethod="get" class="btn btn-primary">Add Employee</button>
+				<button type="submit" class="btn btn-primary">Add Employee</button>
+				<div th:if="${editError != null}" th:text="${editError}" style="color:red;"></div>
 			</form>
+			
 		</div>
 		
 	</div>

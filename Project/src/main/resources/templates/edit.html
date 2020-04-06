@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="fragments :: head"></head>>
 
 <body>
 
@@ -14,7 +14,9 @@
 				</div>
 					
 				<div class="card-body">
-					<form action="#" th:object="${employee}">
+					<form action="/edit" method="post" th:object="${employee}">
+					
+						<div th:text="|You are editing the Employee with the ID: ${employee.id}|"></div>
 					
 						<input name="id" type="hidden" th:value="${employee.id}" />
 						
@@ -46,7 +48,7 @@
 						</div>
 						
 						<button type="submit" formaction="/" formmethod="get" class="btn btn-secondary">Cancel</button>
-						<button type="submit" formaction="/saveEmployeeEdits" formmethod="post" class="btn btn-primary float-right">Save</button>
+						<button type="submit" class="btn btn-primary float-right">Save</button>
 						
 					</form>
 				</div>
