@@ -1,18 +1,12 @@
 package de.wwweasel.RCP;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class EmployeeController {
@@ -21,9 +15,27 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 
 	@RequestMapping(method=RequestMethod.GET,value="/")
-	public String start( Model model, @ModelAttribute("editError") String editError) {
-		model.addAttribute("employees", employeeService.findAll());
-		model.addAttribute("editError", editError);
+	public String start( Model model, @RequestParam(required = false, defaultValue = "none") String filter, @RequestParam(required = false) Integer[] employeeIds) {//, @ModelAttribute("editError") String editError
+		
+		switch (filter) {
+		case "findByProfession":
+			model.addAttribute("employees", employeeService.findByProfession(employeeIds));
+			break;
+			
+		case "findByIds":
+			model.addAttribute("employees", employeeService.findByIds(employeeIds).getEmployees());
+			break;
+			
+		case "none":
+			model.addAttribute("employees", employeeService.findAll());
+			break;
+			
+		default:
+			model.addAttribute("employees", employeeService.findAll());
+			break;
+		}
+		
+		model.addAttribute("editError", "Theres supposed to be an Error");
 		return "index";
 	}
 	
@@ -40,38 +52,37 @@ public class EmployeeController {
 		return "redirect:/";
 	}
 	
-	@RequestMapping(method=RequestMethod.GET,value="/edit/{id}")
-	public ModelAndView editEmployee(@PathVariable Integer id) {
-		ModelAndView mv = new ModelAndView();
-		Optional<Employee> oEmployee = employeeService.findById(id);
-		if(oEmployee.isPresent()) {
-			Employee employee = oEmployee.get();
-			mv.addObject("employee", employee);
-			mv.setViewName("edit");
-			
+	@RequestMapping(method=RequestMethod.GET,value="/edit")
+	public String editEmployee(@RequestParam(required = false) Integer[] employeeIds, Model model) {
+		
+		if(employeeIds!=null) {
+			EmployeeDTO dto = employeeService.findByIds(employeeIds);
+			model.addAttribute("employeesDTO",dto);
+			return "edit";
 		}else {
-			String editError = "Could not find Employee with ID: " + id; 
-			mv.addObject("editError",editError);
-			mv.setViewName("redirect:/");
+			return "redirect:/";
 		}
-		return mv;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/edit")
-	public String editEmployee(@ModelAttribute Employee employee) {
-		employeeService.save(employee);
+	public String editEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
+		for (Employee employee : employeeDTO.getEmployees()) {
+			System.out.println("Save: " + employee);
+			employeeService.save(employee);
+		}
 		return "redirect:/";
 	}
 	
 	
-	@RequestMapping(method=RequestMethod.POST,value="/delete")
-	public String deleteEmployee(@RequestParam Integer id) {
-		employeeService.deleteById(id);
+	@RequestMapping(method=RequestMethod.GET,value="/delete")
+	public String deleteEmployee(@RequestParam Integer[] employeeIds) {
+		for (int i = 0; i < employeeIds.length; i++) {
+			employeeService.deleteById(employeeIds[i]);
+		}
 		return "redirect:/";
 	}
 	
 //	@RequestMapping(method=RequestMethod.GET,value="/find/{ids}")
-//	@ResponseBody
 //	public ArrayList<Employee> getAllEmployees(@PathVariable int[] ids ) {
 //		ArrayList<Employee> list = new ArrayList<Employee>();
 //		for (int id : ids) {
@@ -79,11 +90,5 @@ public class EmployeeController {
 //		}
 //		return list;
 //	}
-	
-	@RequestMapping(method=RequestMethod.GET,value="/findByProfession")
-	@ResponseBody
-	public List<Employee> findByProfession(@RequestParam String profession) {
-		return employeeService.findByProfession(Profession.valueOf(profession));
-	}
 
 }

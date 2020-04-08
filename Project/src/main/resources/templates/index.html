@@ -6,14 +6,12 @@
 
 <div class="container-fluid">
 	<div class="card" style="margin-top: 1.5em;">
-	
-		<div class="card-header">
-			<h6>VFX Employees</h6>
-		</div>
-	
-		<div class="card-body">
-			<form action="#" th:action="@{/add}" th:method="GET" th:object="${employees}">			
-				
+		<form action="#" th:action="@{/add}" th:method="GET" th:object="${employees}">
+			<div class="card-header">
+				<h6>VFX Employees</h6>
+			</div>
+		
+			<div class="card-body">
 				<div th:if="${employees.size() == 0}">
 				  <p>There are no Employees yet.</p>
 				</div>
@@ -26,7 +24,6 @@
 								<th>Lastname</th>
 								<th>Profession</th>
 								<th></th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody>					
@@ -37,27 +34,39 @@
 								<td th:text="${employee.profession}">profession</td>
 								
 								<td>
-									<!--<form method="GET" th:action="@{/delete}">
-										<button type="submit" th:name="id" th:value="${employee.id}" class="btn btn-danger">D</button>
-									</form>-->
-									<button type="submit" th:name="id" th:value="${employee.id}" th:formaction="@{/delete}" th:formmethod="POST" class="btn btn-danger float-right">D</button>
-								</td>
-								<td>	
-									<!--<form method="GET" th:action="@{/edit/{id}(id=${employee.id})}">
-										<button type="submit" class="btn btn-secondary">E</button>
-									</form>-->
-									<button type="submit" th:formaction="@{/edit/{id}(id=${employee.id})}" th:formmethod="GET" class="btn btn-primary">E</button><!-- th:formaction="@{'/edit/' + ${employee.id}}" -->
+									<div class="custom-control custom-switch">
+									  <input type="checkbox" class="custom-control-input" th:id="|checkbox${employee.id}|" name="employeeIds" th:value="${employee.id}"/>
+									  <label class="custom-control-label" th:for="|checkbox${employee.id}|"></label>
+									</div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<button type="submit" class="btn btn-primary">Add Employee</button>
-				<div th:if="${editError != null}" th:text="${editError}" style="color:red;"></div>
-			</form>
-			
-		</div>
-		
+				
+			</div>
+			<div class="card-footer">
+				<div class="btn-group" role="group" aria-label="Button group with nested dropdown" >
+					<button type="submit" class="btn btn-secondary">Add</button>
+					<button type="submit" th:formaction="@{/delete}" th:formmethod="GET" class="btn btn-danger">Delete</button>
+					<button type="submit" th:formaction="@{/edit}" th:formmethod="GET" class="btn btn-secondary">Edit</button><!-- th:name="employeeIds" th:value="${employeeIds}" -->
+					
+					<div class="btn-group" role="group">
+						<button id="btnGroupDrop1" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FilterBy... </button>
+						<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="findByProfession"></input>
+							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="findByIds"></input>
+							<div class="dropdown-divider"></div>
+							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="none"></input>
+						</div>
+					</div>
+				</div>
+				<div th:if="${editError != null}" th:text="${editError}" class="alert alert-danger" role="alert">
+					This is a danger alert—check it out!
+				</div>
+				
+			</div>
+		</form>
 	</div>
 </div>
 	
