@@ -23,6 +23,7 @@
 								<th>Firstname</th>
 								<th>Lastname</th>
 								<th>Profession</th>
+								<th>Salary</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -31,7 +32,8 @@
 								<td th:text="${employee.id}">id</td>
 								<td th:text="${employee.name}">name</td>
 								<td th:text="${employee.surname}"></td>
-								<td th:text="${employee.profession}">profession</td>
+								<td th:text="${employee.profession.profession}">profession</td>
+								<td th:text="${employee.profession.salary}">Salary</td>
 								
 								<td>
 									<div class="custom-control custom-switch">
@@ -57,7 +59,7 @@
 							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="findByProfession"></input>
 							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="findByIds"></input>
 							<div class="dropdown-divider"></div>
-							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="none"></input>
+							<input type="submit" th:formaction="@{/}" th:formmethod="GET" class="dropdown-item" th:name="filter" th:value="removeFilter"></input>
 						</div>
 					</div>
 				</div>

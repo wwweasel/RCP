@@ -14,27 +14,27 @@
 				</div>
 					
 				<div class="card-body">
-					<form action="#" th:object="${employeeProfesioNDTO}">
+					<form action="#" th:object="${employee}">
 						
 						<div class="form-grp row">
 							<label for="name" class="col-md-12 col-lg-3 col-form-label">Name:</label>
 							<div class="col-md-12 col-lg-9">
-								<input class="form-control" th:field="${employeeProfesioNDTO.employee.name}" placeholder="name">
+								<input class="form-control" th:field="${employee.name}" placeholder="name">
 							</div>
 						</div>
 						<div class="form-grp row">
 							<label for="surname" class="col-md-12 col-lg-3 col-form-label">Surname:</label>
 							<div class="col-md-12 col-lg-9">
-								<input class="form-control" th:field="${employeeProfesioNDTO.employee.surname}" placeholder="Surname">
+								<input class="form-control" th:field="${employee.surname}" placeholder="Surname">
 							</div>
 						</div>
 							  
 						<div class="form-grp row">
 							<label for="profession" class="col-md-12 col-lg-3 col-form-label">Profession:</label>
-							<select class="form-control selectpicker col-md-12 col-lg-9" th:field="${employeeProfesioNDTO.professioN.profession}">
+							<select class="form-control selectpicker col-md-12 col-lg-9" th:field="${employee.profession}">
 								<option th:each="profession : ${professions}"
-									th:value="${profession.name()}"
-									th:text="${profession.name()}">
+									th:value="${profession.getId()}"
+									th:text="${profession.getProfession()}">
 								</option>
 							</select>
 						</div>

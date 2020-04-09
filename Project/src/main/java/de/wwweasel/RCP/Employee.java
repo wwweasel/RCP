@@ -10,12 +10,11 @@ import javax.persistence.ManyToOne;
 public class Employee{
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
 	protected String name;
 	protected String surname;
-	protected float salary;
 	
 	@ManyToOne
 	protected ProfessioN profession;
@@ -27,7 +26,6 @@ public class Employee{
 		this.name = name;
 		this.surname = surname;
 		this.profession = profession;
-		this.salary = salary;
 	}
 	
 	public Integer getId() {return id;}
@@ -42,9 +40,6 @@ public class Employee{
 
 	public void setSurname(String surname) {this.surname = surname;}
 
-	public float getSalary() {return salary;}
-	
-	public void setSalary(float salary) {this.salary = salary;}
 
 	public ProfessioN getProfession() { return profession; }
 	
@@ -78,7 +73,7 @@ public class Employee{
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", profession=" + profession + ", salary=" + salary + "]";
+		return "Employee [id=" + id + ", name=" + name + ", surname=" + surname + ", profession=" + profession + "]";
 	}
 	
 	

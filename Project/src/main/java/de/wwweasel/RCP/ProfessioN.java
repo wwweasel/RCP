@@ -13,14 +13,14 @@ import javax.persistence.OneToMany;
 public class ProfessioN {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
 	protected String profession;
 	protected int salary;
 	
-	//@OneToMany(mappedBy = "profession")
-	//private final List<Employee> employees = new ArrayList<>();
+	@OneToMany(mappedBy = "profession")
+	private final List<Employee> employees = new ArrayList<>();
 	
 	// Constructors
 	public ProfessioN(){}
@@ -41,7 +41,7 @@ public class ProfessioN {
 
 	public void setSalary(int salary) {this.salary = salary;}
 
-	//public List<Employee> getEmployees() {return employees;}
+	public List<Employee> getEmployees() {return employees;}
 
 
 	@Override
