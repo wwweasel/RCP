@@ -8,18 +8,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import DTO.EmployeeDTO;
+import DTO.EmployeeProfesioNDTO;
+
 @Controller
 public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	ProfessioNService professioNService;
 
 	@RequestMapping(method=RequestMethod.GET,value="/")
 	public String start( Model model, @RequestParam(required = false, defaultValue = "none") String filter, @RequestParam(required = false) Integer[] employeeIds) {//, @ModelAttribute("editError") String editError
 		
 		switch (filter) {
 		case "findByProfession":
-			model.addAttribute("employees", employeeService.findByProfession(employeeIds));
+			//model.addAttribute("employees", employeeService.findByProfession(employeeIds));
+			model.addAttribute("employees", employeeService.findAll());
 			break;
 			
 		case "findByIds":
@@ -41,13 +47,23 @@ public class EmployeeController {
 	
 	@RequestMapping(method=RequestMethod.GET,value="/add")
 	public String addEmployee(Model model) {
-		model.addAttribute("employee", new Employee());
-		model.addAttribute("professions", Profession.values() );//Add all the values of Profession for a DropDown 
+		EmployeeProfesioNDTO employeeProfesioNDTO = new EmployeeProfesioNDTO();
+		employeeProfesioNDTO.setEmployee(new Employee());
+		employeeProfesioNDTO.setProfessioN(new ProfessioN());
+		
+		model.addAttribute("employeeProfesioNDTO", employeeProfesioNDTO);
+		model.addAttribute("professions", Professions.values() ); // Feed all Enum COnstants for the Dropdown
 		return "add";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
-	public String addEmployee(@ModelAttribute Employee employee) {
+	public String addEmployee(@ModelAttribute EmployeeProfesioNDTO employeeProfesioNDTO) {
+		ProfessioN professioN = employeeProfesioNDTO.getProfessioN();
+		Employee employee = employeeProfesioNDTO.getEmployee();
+		
+		professioN = professioNService.save(professioN);
+		
+		employee.setProfession(professioN);
 		employeeService.save( employee );
 		return "redirect:/";
 	}

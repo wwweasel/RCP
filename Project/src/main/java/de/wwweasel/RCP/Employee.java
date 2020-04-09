@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee{
@@ -15,17 +16,23 @@ public class Employee{
 	protected String name;
 	protected String surname;
 	protected float salary;
-	protected Profession profession;
+	
+	@ManyToOne
+	protected ProfessioN profession;
 	
 	public Employee() {}
 	
-	public Employee( String name ,String surname, Profession profession, float salary) {
+	public Employee( String name ,String surname, ProfessioN profession, float salary) {
 		
 		this.name = name;
 		this.surname = surname;
 		this.profession = profession;
 		this.salary = salary;
 	}
+	
+	public Integer getId() {return id;}
+	
+	public void setId(Integer id) {this.id = id;}
 
 	public String getName() {return name;}
 
@@ -39,14 +46,9 @@ public class Employee{
 	
 	public void setSalary(float salary) {this.salary = salary;}
 
-	public Profession getProfession() { return profession; }
+	public ProfessioN getProfession() { return profession; }
 	
-	public void setProfession(Profession profession) { this.profession = profession; }
-	
-	public Integer getId() {return id;}
-	
-	public void setId(Integer id) {this.id = id;}
-	
+	public void setProfession(ProfessioN profession) { this.profession = profession; }
 	
 
 	@Override

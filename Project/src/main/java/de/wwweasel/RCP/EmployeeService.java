@@ -1,11 +1,12 @@
 package de.wwweasel.RCP;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import DTO.EmployeeDTO;
 
 @Service
 public class EmployeeService {
@@ -13,7 +14,7 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepo repo;
 		
-	public Employee createEmployee(String name ,String surname, Profession profession) {
+	public Employee createEmployee(String name ,String surname, ProfessioN profession) {
 		return new Employee(name,surname,profession,profession.getSalary());
 	}
 
@@ -24,11 +25,6 @@ public class EmployeeService {
 	public List<Employee> findAll(){
 		return repo.findAll();
 	}
-
-//	public Optional<Employee> findById(Integer id) {
-//		Optional<Employee> oEmployee = repo.findById(id);
-//		return oEmployee;
-//	}
 	
 	public EmployeeDTO findByIds(Integer[] employeeIds) {
 		EmployeeDTO dto = new EmployeeDTO();
@@ -49,16 +45,16 @@ public class EmployeeService {
 	}
 	
 	
-	public ArrayList<Employee> findByProfession( Integer[] employeeIds){
-		ArrayList<Employee> employees = new ArrayList<Employee>();
-		for (int i = 0; i < employeeIds.length; i++) {
-			Profession profession = repo.findById(employeeIds[i]).get().getProfession();
-			List<Employee> current_profession_list = repo.findByProfession(profession);
-			for (Employee e : current_profession_list) {
-				employees.add(e);
-			}
-		}
-		return employees;
-	}
+//	public ArrayList<Employee> findByProfession( Integer[] employeeIds){
+//		ArrayList<Employee> employees = new ArrayList<Employee>();
+//		for (int i = 0; i < employeeIds.length; i++) {
+//			ProfessioN profession = repo.findById(employeeIds[i]).get().getProfession();
+//			List<Employee> current_profession_list = repo.findByProfession(profession);
+//			for (Employee e : current_profession_list) {
+//				employees.add(e);
+//			}
+//		}
+//		return employees;
+//	}
 	
 }

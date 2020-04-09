@@ -1,33 +1,48 @@
 package de.wwweasel.RCP;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ProfessioN {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	protected final String title;
+	protected String profession;
 	protected int salary;
 	
-	// Constructor
-	public ProfessioN(String title, int salary) {
-		this.title = title;
+	//@OneToMany(mappedBy = "profession")
+	//private final List<Employee> employees = new ArrayList<>();
+	
+	// Constructors
+	public ProfessioN(){}
+	
+	public ProfessioN(String profession, int salary) {
+		this.profession = profession.toUpperCase();
 		this.salary = salary;
 	}
 	
 	// Getters and Setters
+	public Integer getId() {return id;}
+	
+	public String getProfession() {return profession;}
+	
+	public void setProfession(String profession) {this.profession = profession.toUpperCase();}
+	
 	public int getSalary() {return salary;}
 
 	public void setSalary(int salary) {this.salary = salary;}
 
-	public Integer getId() {return id;}
+	//public List<Employee> getEmployees() {return employees;}
 
-	public String getTitle() {return title;}
 
 	@Override
 	public int hashCode() {
@@ -53,8 +68,10 @@ public class ProfessioN {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "ProfessioN [id=" + id + ", profession=" + profession + ", salary=" + salary + "]";
+	}
 	
 }

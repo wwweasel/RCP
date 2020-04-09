@@ -1,6 +1,8 @@
-package de.wwweasel.RCP;
+package DTO;
 
 import java.util.ArrayList;
+
+import de.wwweasel.RCP.Employee;
 
 
 public class EmployeeDTO {
