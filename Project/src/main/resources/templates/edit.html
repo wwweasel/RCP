@@ -44,8 +44,8 @@
 									<label for="profession" class="col-md-12 col-lg-3 col-form-label">Profession:</label>
 									<select class="form-control selectpicker col-md-12 col-lg-9" th:field="*{employees[__${itemStat.index}__].profession}">
 										<option th:each="profession : ${professions}"
-											th:value="${profession.getId()}"
-											th:text="${profession.getProfession()}">
+											th:value="${profession}"
+											th:text="${profession}">
 										</option>
 									</select>
 								</div>

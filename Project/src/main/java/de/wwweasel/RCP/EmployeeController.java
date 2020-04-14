@@ -18,8 +18,6 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
-	@Autowired
-	ProfessioNService professioNService;
 
 	@RequestMapping(method=RequestMethod.GET,value="/")
 	public String start( Model model, @RequestParam(required = false, defaultValue = "removeFilter") String filter, @RequestParam(required = false) Integer[] employeeIds) {//, @ModelAttribute("editError") String editError
@@ -28,6 +26,7 @@ public class EmployeeController {
 		case "findByProfession":
 			if(employeeIds!=null) {
 				model.addAttribute("employees", employeeService.findByProfession(employeeIds));
+				//model.addAttribute("employees", employeeService.findAll());
 			}else {
 				model.addAttribute("employees", employeeService.findAll());
 			}
@@ -56,14 +55,14 @@ public class EmployeeController {
 	@RequestMapping(method=RequestMethod.GET,value="/add")
 	public String addEmployee(Model model) {		
 		model.addAttribute("employee", new Employee());
-		model.addAttribute("professions", professioNService.findAll() );
+		model.addAttribute("professions", Profession.values() );
 		return "add";
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
 	public String addEmployee(@ModelAttribute @Valid Employee employee, Errors errors, Model model) {
 		if(errors.hasErrors()){
-			model.addAttribute("professions", professioNService.findAll() );
+			model.addAttribute("professions", Profession.values() );
 			return "add";
 		}else{
 			employeeService.save( employee );
@@ -76,7 +75,7 @@ public class EmployeeController {
 		if(employeeIds!=null) {
 			EmployeesDTO dto = employeeService.findByIds(employeeIds);
 			model.addAttribute("employeesDTO",dto);
-			model.addAttribute("professions", professioNService.findAll() );
+			model.addAttribute("professions", Profession.values() );
 			return "edit";
 		}else {
 			return "redirect:/";
@@ -86,11 +85,10 @@ public class EmployeeController {
 	@RequestMapping(method=RequestMethod.POST,value="/edit")
 	public String editEmployee(@ModelAttribute @Valid EmployeesDTO employeeDTO, Errors errors, Model model) {
 		if(errors.hasErrors()){
-			model.addAttribute("professions", professioNService.findAll() );
+			model.addAttribute("professions", Profession.values() );
 			return "edit";
 		}else{
 			for (Employee employee : employeeDTO.getEmployees()) {
-				System.out.println("Save: " + employee);
 				employeeService.save(employee);
 			}
 			return "redirect:/";

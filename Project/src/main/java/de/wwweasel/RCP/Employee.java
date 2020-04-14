@@ -1,10 +1,11 @@
 package de.wwweasel.RCP;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -19,12 +20,12 @@ public class Employee{
 	@NotBlank(message="required")
 	protected String surname;
 	
-	@ManyToOne
-	protected ProfessioN profession;
+	@Enumerated(EnumType.STRING)
+	protected Profession profession;
 	
 	public Employee() {}
 	
-	public Employee( String name ,String surname, ProfessioN profession, float salary) {
+	public Employee( String name ,String surname, Profession profession, float salary) {
 		
 		this.name = name;
 		this.surname = surname;
@@ -44,9 +45,9 @@ public class Employee{
 	public void setSurname(String surname) {this.surname = surname;}
 
 
-	public ProfessioN getProfession() { return profession; }
+	public Profession getProfession() { return profession; }
 	
-	public void setProfession(ProfessioN profession) { this.profession = profession; }
+	public void setProfession(Profession profession) { this.profession = profession; }
 	
 
 	@Override
