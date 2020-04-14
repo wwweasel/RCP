@@ -20,12 +20,15 @@
 							<label for="name" class="col-md-12 col-lg-3 col-form-label">Name:</label>
 							<div class="col-md-12 col-lg-9">
 								<input class="form-control" th:field="${employee.name}" placeholder="name">
+								<div th:errors="${employee.name}" class="alert alert-danger" role="alert"></div>
 							</div>
+							
 						</div>
 						<div class="form-grp row">
 							<label for="surname" class="col-md-12 col-lg-3 col-form-label">Surname:</label>
 							<div class="col-md-12 col-lg-9">
 								<input class="form-control" th:field="${employee.surname}" placeholder="Surname">
+								<div th:errors="${employee.surname}" class="alert alert-danger" role="alert"></div>
 							</div>
 						</div>
 							  

@@ -19,19 +19,4 @@ public class ProfessioNService {
 		return repo.findAll();
 	}
 	
-	public List<ProfessioN> findByProfession(String profession){
-		return repo.findByProfession(profession.toUpperCase());
-	}
-	
-//	public ArrayList<String> getProfessions(){
-//		ArrayList<String> professions = new ArrayList<String>();
-//		if(repo.count()>0) {
-//			
-//			for (ProfessioN professioN : repo.findAll()) {
-//				professions.add(professioN.getProfession());
-//			}
-//		}
-//		return professions;
-//	}
-	
 }

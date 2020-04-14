@@ -1,8 +1,10 @@
 package de.wwweasel.RCP;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,23 +47,41 @@ public class EmployeeService {
 		repo.deleteById(id);
 	}
 	
+	// Find by using the SQL Query from the EmployeeRepo
 	public ArrayList<Employee> findByProfession( Integer[] employeeIds){
-		
-		ArrayList<Employee> employees = new ArrayList<Employee>();
+		Set<Employee> employees = new HashSet<>();
 		
 		for (int i = 0; i < employeeIds.length; i++) {
 			Optional<Employee> employeeO = repo.findById(employeeIds[i]);
 			if(employeeO.isPresent()) {
 				Employee employee = employeeO.get();
-				for (Employee e : employee.getProfession().getEmployees()) {
+				for (Employee e : repo.findByProfession(employee.getProfession())) {
 					employees.add(e);
 				}
-			}else {
-				System.out.println("findByProfession() -> Could not find Employee with ID: " + employeeIds[i]);
+				
 			}
 		}
-		
-		return employees;
+		return new ArrayList<Employee>(employees);
 	}
+	
+	// Same as above but using the getEmployees() from ProfessioN
+//	public ArrayList<Employee> findByProfession( Integer[] employeeIds){
+//		
+//		ArrayList<Employee> employees = new ArrayList<Employee>();
+//		
+//		for (int i = 0; i < employeeIds.length; i++) {
+//			Optional<Employee> employeeO = repo.findById(employeeIds[i]);
+//			if(employeeO.isPresent()) {
+//				Employee employee = employeeO.get();
+//				for (Employee e : employee.getProfession().getEmployees()) {
+//					employees.add(e);
+//				}
+//			}else {
+//				System.out.println("findByProfession() -> Could not find Employee with ID: " + employeeIds[i]);
+//			}
+//		}
+//		
+//		return employees;
+//	}
 	
 }

@@ -5,6 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+
+
 @Component
 @Order(1)
 public class ApplicationStartupRunner implements CommandLineRunner{
@@ -20,5 +22,10 @@ public class ApplicationStartupRunner implements CommandLineRunner{
     	professioNService.save(new ProfessioN("TEXTURING",6000));
     	professioNService.save(new ProfessioN("LIGHTING",6000));
     	professioNService.save(new ProfessioN("COMP",6000));
+    	
     }
+    
+    
+    
+    
 }

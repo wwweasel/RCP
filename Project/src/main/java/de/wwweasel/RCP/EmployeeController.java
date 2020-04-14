@@ -1,15 +1,17 @@
 package de.wwweasel.RCP;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import DTO.EmployeesDTO;
-import DTO.EmployeeProfesioNDTO;
 
 @Controller
 public class EmployeeController {
@@ -48,7 +50,6 @@ public class EmployeeController {
 			break;
 		}
 		
-		model.addAttribute("editError", "Theres supposed to be an Error");
 		return "index";
 	}
 	
@@ -60,9 +61,14 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/add")
-	public String addEmployee(@ModelAttribute Employee employee) {
-		employeeService.save( employee );
-		return "redirect:/";
+	public String addEmployee(@ModelAttribute @Valid Employee employee, Errors errors, Model model) {
+		if(errors.hasErrors()){
+			model.addAttribute("professions", professioNService.findAll() );
+			return "add";
+		}else{
+			employeeService.save( employee );
+			return "redirect:/";
+		}	
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,value="/edit")
@@ -78,14 +84,18 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST,value="/edit")
-	public String editEmployee(@ModelAttribute EmployeesDTO employeeDTO) {
-		for (Employee employee : employeeDTO.getEmployees()) {
-			System.out.println("Save: " + employee);
-			employeeService.save(employee);
-		}
-		return "redirect:/";
+	public String editEmployee(@ModelAttribute @Valid EmployeesDTO employeeDTO, Errors errors, Model model) {
+		if(errors.hasErrors()){
+			model.addAttribute("professions", professioNService.findAll() );
+			return "edit";
+		}else{
+			for (Employee employee : employeeDTO.getEmployees()) {
+				System.out.println("Save: " + employee);
+				employeeService.save(employee);
+			}
+			return "redirect:/";
+		}	
 	}
-	
 	
 	@RequestMapping(method=RequestMethod.GET,value="/delete")
 	public String deleteEmployee(@RequestParam(required = false) Integer[] employeeIds) {
@@ -96,14 +106,5 @@ public class EmployeeController {
 		}
 		return "redirect:/";
 	}
-	
-//	@RequestMapping(method=RequestMethod.GET,value="/find/{ids}")
-//	public ArrayList<Employee> getAllEmployees(@PathVariable int[] ids ) {
-//		ArrayList<Employee> list = new ArrayList<Employee>();
-//		for (int id : ids) {
-//			list.add( employeeService.findById(id).get() );
-//		}
-//		return list;
-//	}
 
 }
